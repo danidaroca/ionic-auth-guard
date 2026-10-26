@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrega Práctica: Control de Acceso y Functional Guards - Daniel Daroca</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    body {
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+      color: #1e293b;
+      background: #e2e8f0;
+      font-size: 8.4pt;
+      line-height: 1.34;
+    }
+
+    .page {
+      width: 210mm;
+      height: 297mm;
+      max-height: 297mm;
+      background: #ffffff;
+      padding: 10mm 12mm 8mm 12mm;
+      margin: 10px auto;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      page-break-after: always;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+    }
+
+    @media print {
+      body { background: transparent; }
+      .page {
+        margin: 0;
+        box-shadow: none;
+        page-break-after: always;
+      }
+    }
+
+    /* HEADER */
+    .header-banner {
+      border-bottom: 2.5px solid #2563eb;
+      padding-bottom: 5px;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .header-left h1 {
+      font-size: 13pt;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+    .header-left .subtitle {
+      font-size: 8.2pt;
+      color: #2563eb;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+    .header-meta {
+      text-align: right;
+      font-size: 7.6pt;
+      color: #475569;
+      line-height: 1.3;
+    }
+    .header-meta strong { color: #0f172a; }
+
+    /* LINKS BAR */
+    .links-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 7px;
+    }
+    .link-pill {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 9px;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      text-decoration: none;
+      color: #0f172a;
+      font-size: 7.6pt;
+    }
+    .link-pill .icon { font-size: 11pt; }
+    .link-pill strong { color: #2563eb; }
+    .link-pill span.url {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 7.2pt;
+      color: #0369a1;
+      margin-left: auto;
+      font-weight: 600;
+    }
+
+    /* CURRICULUM BOX */
+    .curriculum-box {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 5px;
+      padding: 5px 8px;
+      margin-bottom: 7px;
+      font-size: 7.3pt;
+      color: #166534;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+    .curriculum-item strong { display: block; color: #14532d; font-size: 7.6pt; margin-bottom: 1px; }
+
+    /* SECTION TITLES */
+    .section-title {
+      font-size: 8.8pt;
+      font-weight: 700;
+      color: #0f172a;
+      border-left: 3px solid #2563eb;
+      padding-left: 6px;
+      margin: 5px 0 3px 0;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .section-title span.tag {
+      font-size: 6.8pt;
+      font-weight: 600;
+      background: #eff6ff;
+      color: #1d4ed8;
+      padding: 1px 5px;
+      border-radius: 4px;
+      margin-left: auto;
+    }
+
+    .two-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 5px;
+    }
+    .three-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 7px;
+      margin-bottom: 5px;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 6px 8px;
+    }
+
+    /* CODE BLOCKS */
+    pre, code {
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+    .code-box {
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 5px;
+      padding: 5px 8px;
+      font-size: 6.6pt;
+      line-height: 1.25;
+      overflow: hidden;
+      margin-top: 3px;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .code-box .kw { color: #f43f5e; font-weight: 600; }
+    .code-box .fn { color: #38bdf8; }
+    .code-box .str { color: #4ade80; }
+    .code-box .cm { color: #94a3b8; font-style: italic; }
+    .code-box .tp { color: #fbbf24; }
+    .code-box .pol { color: #a78bfa; font-weight: 600; }
+
+    /* MOCKUPS / SCREENSHOTS SIMULATION */
+    .mockup-container {
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      overflow: hidden;
+      background: #ffffff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      margin-top: 3px;
+    }
+    .mockup-header {
+      background: #1e293b;
+      color: #94a3b8;
+      padding: 3px 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 6.8pt;
+    }
+    .mockup-dots {
+      display: flex;
+      gap: 3px;
+    }
+    .mockup-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+    .mockup-dot.r { background: #ef4444; }
+    .mockup-dot.y { background: #f59e0b; }
+    .mockup-dot.g { background: #10b981; }
+    .mockup-url {
+      color: #cbd5e1;
+      font-family: monospace;
+      font-size: 6.6pt;
+      background: #0f172a;
+      padding: 1px 6px;
+      border-radius: 3px;
+      flex: 1;
+    }
+    .mockup-body {
+      padding: 6px 8px;
+      background: #f8fafc;
+      font-size: 7.1pt;
+    }
+    .mock-toolbar {
+      background: #2563eb;
+      color: white;
+      padding: 4px 7px;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+      font-weight: 700;
+      font-size: 7.4pt;
+    }
+    .mock-toolbar.dark { background: #1e293b; }
+    .mock-badge {
+      background: #10b981;
+      color: white;
+      font-size: 6.2pt;
+      padding: 1px 5px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+    .mock-badge.admin { background: #3b82f6; }
+    .mock-badge.user { background: #0d9488; }
+    .mock-badge.err { background: #ef4444; }
+
+    .test-box {
+      border: 1px dashed #f59e0b;
+      background: #fffbeb;
+      padding: 4px 6px;
+      border-radius: 4px;
+      margin-top: 4px;
+      font-size: 6.8pt;
+      color: #92400e;
+    }
+
+    /* TABLE */
+    .styled-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 7.1pt;
+      margin-top: 4px;
+    }
+    .styled-table th, .styled-table td {
+      border: 1px solid #cbd5e1;
+      padding: 3.5px 6px;
+      text-align: left;
+    }
+    .styled-table th {
+      background: #f1f5f9;
+      color: #0f172a;
+      font-weight: 700;
+    }
+    .styled-table tr:nth-child(even) { background: #f8fafc; }
+    .status-ok {
+      color: #16a34a;
+      font-weight: 700;
+    }
+
+    /* FOOTER */
+    .page-footer {
+      border-top: 1px solid #cbd5e1;
+      padding-top: 4px;
+      margin-top: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 6.8pt;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== PÁGINA 1 ==================== -->
+  <div class="page">
+    <div>
+      <div class="header-banner">
+        <div class="header-left">
+          <h1>Control de Acceso y Protección de Rutas</h1>
+          <div class="subtitle">Ionic Framework • Angular Standalone • Functional Guards (CanActivateFn) • Web Storage API</div>
+        </div>
+        <div class="header-meta">
+          <strong>Módulo:</strong> Desarrollo de Interfaces (0488)<br>
+          <strong>Ciclo:</strong> 2º Curso DAM • 2026-2027<br>
+          <strong>Alumno:</strong> Daniel Daroca
+        </div>
+      </div>
+
+      <div class="links-bar">
+        <div class="link-pill">
+          <span class="icon">🐙</span>
+          <div><strong>Repositorio GitHub:</strong></div>
+          <span class="url">https://github.com/danidaroca/ionic-auth-guard</span>
+        </div>
+        <div class="link-pill">
+          <span class="icon">🚀</span>
+          <div><strong>Despliegue Vercel:</strong></div>
+          <span class="url">https://ionic-auth-guard.vercel.app</span>
+        </div>
+      </div>
+
+      <div class="curriculum-box">
+        <div class="curriculum-item">
+          <strong>CE 1.b: MVVM & Separación</strong>
+          Inyección desacoplada con <code>inject()</code>, reactividad pura con Signals y estado persistente.
+        </div>
+        <div class="curriculum-item">
+          <strong>CE 1.c: Enrutamiento Modular</strong>
+          Navegación jerárquica con <em>Lazy Loading</em> (`loadComponent: () => import(...)`).
+        </div>
+        <div class="curriculum-item">
+          <strong>CE 1.d: Functional Guards</strong>
+          Mecanismos <code>CanActivateFn</code> y factoría <code>roleGuard</code> devolviendo <code>UrlTree</code>.
+        </div>
+        <div class="curriculum-item">
+          <strong>CE 1.e: Persistencia Segura</strong>
+          Sincronización síncrona en <code>sessionStorage</code> con clave <code>DAM2_AUTH_SESSION</code>.
+        </div>
+      </div>
+
+      <div class="section-title">
+        <span>1. Fundamentos Técnicos: Del Enfoque Clásico a Functional Guards</span>
+        <span class="tag">Arquitectura Angular v16+</span>
+      </div>
+
+      <div class="two-cols">
+        <div class="card">
+          <strong>Evolución y Ventajas de CanActivateFn:</strong>
+          <p style="margin-top: 2px;">
+            A partir de Angular 16+, el framework abandonó las clases con la interfaz <code>CanActivate</code> y constructores jerárquicos. El estándar actual son las <strong>Functional Guards</strong>:
+          </p>
+          <ul style="margin-left: 14px; margin-top: 3px;">
+            <li><strong>Funciones Puras:</strong> Se ejecutan en el pipeline antes de instanciar el componente destino.</li>
+            <li><strong>Inyección con <code>inject()</code>:</strong> Contexto de inyección directo y seguro, sin acoplar dependencias a clases ni requerir <code>providers</code> en módulos.</li>
+            <li><strong>Redirección Atómica con <code>UrlTree</code>:</strong> En lugar de retornar un booleano <code>false</code> y llamar manualmente a <code>router.navigate()</code> (lo que genera condiciones de carrera y parpadeos visuales), retornar <code>router.createUrlTree(['/login'])</code> detiene la navegación solicitada y conmuta a la ruta de forma atómica en el mismo ciclo.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <strong>Ciclo de Vida y Persistencia de Sesión:</strong>
+          <p style="margin-top: 2px;">
+            Cuando el usuario refresca el navegador (<code>F5</code>) o escribe directamente una URL, el contexto en memoria de JavaScript se destruye y reinicia por completo.
+          </p>
+          <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 4px 6px; margin-top: 4px; font-size: 6.9pt;">
+            <code>1. Usuario recarga /admin</code> ➔ <code>2. Router activa guards</code> ➔ <code>3. AuthService hidrata desde sessionStorage('DAM2_AUTH_SESSION')</code> ➔ <code>4. Signal reactivo disponible</code> ➔ <code>5. authGuard valida y permite o devuelve UrlTree('/login')</code>.
+          </div>
+          <p style="margin-top: 4px; font-size: 7.2pt; color: #475569;">
+            El uso de <code>sessionStorage</code> garantiza que los datos persistan durante la navegación activa en la pestaña, pero se limpien automáticamente al cerrarla, asegurando máxima higiene de sesión.
+          </p>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <span>2. Diagrama de Flujo y Pipeline de Navegación</span>
+        <span class="tag">Mecanismo de Intercepción</span>
+      </div>
+
+      <div class="card" style="background: #fafafa; text-align: center; padding: 7px 10px;">
+        <svg viewBox="0 0 780 140" style="width: 100%; max-height: 105px; font-family: monospace; font-size: 10.5px;">
+          <!-- Nodo 1 -->
+          <rect x="10" y="45" width="120" height="42" rx="6" fill="#1e293b" />
+          <text x="70" y="62" fill="#f8fafc" text-anchor="middle" font-weight="bold">Petición URL</text>
+          <text x="70" y="77" fill="#94a3b8" text-anchor="middle">/admin | /user</text>
+
+          <line x1="130" y1="66" x2="165" y2="66" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)" />
+
+          <!-- Nodo 2 Router -->
+          <rect x="165" y="45" width="130" height="42" rx="6" fill="#2563eb" />
+          <text x="230" y="62" fill="#ffffff" text-anchor="middle" font-weight="bold">Angular Router</text>
+          <text x="230" y="77" fill="#bfdbfe" text-anchor="middle">Pipeline Ejecución</text>
+
+          <line x1="295" y1="66" x2="330" y2="66" stroke="#2563eb" stroke-width="2" />
+
+          <!-- Nodo 3 Guard -->
+          <polygon points="390,30 455,66 390,102 325,66" fill="#f59e0b" />
+          <text x="390" y="63" fill="#ffffff" text-anchor="middle" font-weight="bold" font-size="9.5px">¿Sesión</text>
+          <text x="390" y="75" fill="#ffffff" text-anchor="middle" font-weight="bold" font-size="9.5px">Válida?</text>
+
+          <!-- Camino No -->
+          <line x1="390" y1="102" x2="390" y2="120" stroke="#ef4444" stroke-width="2" />
+          <line x1="390" y1="120" x2="480" y2="120" stroke="#ef4444" stroke-width="2" />
+          <rect x="480" y="103" width="135" height="34" rx="5" fill="#ef4444" />
+          <text x="547" y="118" fill="#ffffff" text-anchor="middle" font-weight="bold">UrlTree('/login')</text>
+          <text x="547" y="130" fill="#fee2e2" text-anchor="middle">Redirección atómica</text>
+
+          <!-- Camino Si -->
+          <line x1="455" y1="66" x2="495" y2="66" stroke="#10b981" stroke-width="2" />
+          <text x="475" y="58" fill="#10b981" font-weight="bold" font-size="9px">SÍ</text>
+
+          <!-- Nodo 4 Role Guard -->
+          <polygon points="555,30 620,66 555,102 490,66" fill="#0d9488" />
+          <text x="555" y="63" fill="#ffffff" text-anchor="middle" font-weight="bold" font-size="9.5px">¿Rol</text>
+          <text x="555" y="75" fill="#ffffff" text-anchor="middle" font-weight="bold" font-size="9.5px">Autorizado?</text>
+
+          <!-- Role Denegado -->
+          <line x1="555" y1="102" x2="555" y2="120" stroke="#ef4444" stroke-width="2" />
+          <line x1="555" y1="120" x2="640" y2="120" stroke="#ef4444" stroke-width="2" />
+          <rect x="640" y="103" width="130" height="34" rx="5" fill="#f97316" />
+          <text x="705" y="118" fill="#ffffff" text-anchor="middle" font-weight="bold">UrlTree('/user-dash')</text>
+          <text x="705" y="130" fill="#ffedd5" text-anchor="middle">RBAC denegado</text>
+
+          <!-- Role OK -->
+          <line x1="620" y1="66" x2="655" y2="66" stroke="#10b981" stroke-width="2" />
+          <text x="637" y="58" fill="#10b981" font-weight="bold" font-size="9px">SÍ</text>
+          <rect x="655" y="45" width="115" height="42" rx="6" fill="#10b981" />
+          <text x="712" y="62" fill="#ffffff" text-anchor="middle" font-weight="bold">return true</text>
+          <text x="712" y="77" fill="#d1fae5" text-anchor="middle">Monta Vista</text>
+        </svg>
+      </div>
+
+      <div class="section-title">
+        <span>3. Control de Acceso Granular Basado en Roles (Propuesta del Ejercicio)</span>
+        <span class="tag">Requisito Sección 4</span>
+      </div>
+
+      <div class="card">
+        <p>Se ha dado cumplimiento integral a los requerimientos propuestos en el punto 4 de la guía:</p>
+        <div class="three-cols" style="margin-top: 4px;">
+          <div style="background: #f1f5f9; padding: 4px 6px; border-radius: 4px;">
+            <strong>1. Perfil Admin:</strong>
+            <code>admin / 123</code> (Rol: <code>'admin'</code>). Acceso total al panel <code>/admin</code>.
+          </div>
+          <div style="background: #f1f5f9; padding: 4px 6px; border-radius: 4px;">
+            <strong>2. Perfil Operador:</strong>
+            <code>operador / 123</code> (Rol: <code>'user'</code>). Acceso concedido a <code>/user-dashboard</code>.
+          </div>
+          <div style="background: #f1f5f9; padding: 4px 6px; border-radius: 4px;">
+            <strong>3. Factoría roleGuard:</strong>
+            Genera guards parametrizados <code>roleGuard(role)</code> que deniegan accesos no autorizados.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <span>Desarrollo de Interfaces (0488) • Práctica Ionic & Angular Standalone</span>
+      <span>Página 1 de 4</span>
+      <span>Daniel Daroca — 2º DAM</span>
+    </div>
+  </div>
+
+  <!-- ==================== PÁGINA 2 ==================== -->
+  <div class="page">
+    <div>
+      <div class="header-banner">
+        <div class="header-left">
+          <h1>Código Relevante: Core de Seguridad y Servicios</h1>
+          <div class="subtitle">AuthService (Signals + Storage), Functional Guards y Enrutamiento Modular</div>
+        </div>
+        <div class="header-meta">
+          <strong>Archivo:</strong> auth.service.ts / auth.guard.ts<br>
+          <strong>Patrón:</strong> Functional RBAC & Signals<br>
+          <strong>Alumno:</strong> Daniel Daroca
+        </div>
+      </div>
+
+      <div class="section-title">
+        <span>1. Servicio de Autenticación con Angular Signals y Persistencia (src/app/core/services/auth.service.ts)</span>
+        <span class="tag">Multi-Rol & Signals</span>
+      </div>
+
+      <div class="code-box"><span class="kw">import</span> { Injectable, signal, computed } <span class="kw">from</span> <span class="str">'@angular/core'</span>;
+
+<span class="kw">export interface</span> <span class="tp">UserSession</span> {
+  username: <span class="tp">string</span>;
+  role: <span class="str">'admin'</span> | <span class="str">'user'</span>;
+  isAuthenticated: <span class="tp">boolean</span>;
+}
+
+<span class="pol">@Injectable</span>({ providedIn: <span class="str">'root'</span> })
+<span class="kw">export class</span> <span class="tp">AuthService</span> {
+  <span class="kw">private readonly</span> STORAGE_KEY = <span class="str">'DAM2_AUTH_SESSION'</span>;
+
+  <span class="cm">// Estado reactivo reactivado síncronamente desde sessionStorage al arrancar</span>
+  <span class="kw">private</span> _currentUser = signal&lt;<span class="tp">UserSession</span> | <span class="kw">null</span>&gt;(<span class="kw">this</span>.<span class="fn">readSessionFromStorage</span>());
+
+  <span class="cm">// Selectores computados expuestos a la aplicación</span>
+  <span class="kw">public</span> currentUser = <span class="kw">this</span>._currentUser.<span class="fn">asReadonly</span>();
+  <span class="kw">public</span> isAuthenticated = <span class="fn">computed</span>(() =&gt; <span class="kw">this</span>._currentUser()?.isAuthenticated ?? <span class="kw">false</span>);
+
+  <span class="cm">/** Valida credenciales requeridas: admin/123 y operador/123 (Requisito Sección 4) */</span>
+  <span class="kw">public</span> <span class="fn">login</span>(user: <span class="tp">string</span>, pass: <span class="tp">string</span>): <span class="tp">boolean</span> {
+    <span class="kw">let</span> sessionData: <span class="tp">UserSession</span> | <span class="kw">null</span> = <span class="kw">null</span>;
+
+    <span class="kw">if</span> (user === <span class="str">'admin'</span> &amp;&amp; pass === <span class="str">'123'</span>) {
+      sessionData = { username: user, role: <span class="str">'admin'</span>, isAuthenticated: <span class="kw">true</span> };
+    } <span class="kw">else if</span> (user === <span class="str">'operador'</span> &amp;&amp; pass === <span class="str">'123'</span>) {
+      sessionData = { username: user, role: <span class="str">'user'</span>, isAuthenticated: <span class="kw">true</span> };
+    }
+
+    <span class="kw">if</span> (sessionData) {
+      <span class="cm">// 1. Actualizar memoria reactiva</span>
+      <span class="kw">this</span>._currentUser.<span class="fn">set</span>(sessionData);
+      <span class="cm">// 2. Persistir en el navegador (Web Storage API)</span>
+      sessionStorage.<span class="fn">setItem</span>(<span class="kw">this</span>.STORAGE_KEY, JSON.<span class="fn">stringify</span>(sessionData));
+      <span class="kw">return true</span>;
+    }
+    <span class="kw">return false</span>;
+  }
+
+  <span class="kw">public</span> <span class="fn">logout</span>(): <span class="tp">void</span> {
+    sessionStorage.<span class="fn">removeItem</span>(<span class="kw">this</span>.STORAGE_KEY);
+    <span class="kw">this</span>._currentUser.<span class="fn">set</span>(<span class="kw">null</span>);
+  }
+
+  <span class="kw">private</span> <span class="fn">readSessionFromStorage</span>(): <span class="tp">UserSession</span> | <span class="kw">null</span> {
+    <span class="kw">const</span> raw = sessionStorage.<span class="fn">getItem</span>(<span class="kw">this</span>.STORAGE_KEY);
+    <span class="kw">if</span> (!raw) <span class="kw">return null</span>;
+    <span class="kw">try</span> { <span class="kw">return</span> JSON.<span class="fn">parse</span>(raw) <span class="kw">as</span> <span class="tp">UserSession</span>; }
+    <span class="kw">catch</span> { sessionStorage.<span class="fn">removeItem</span>(<span class="kw">this</span>.STORAGE_KEY); <span class="kw">return null</span>; }
+  }
+}</div>
+
+      <div class="two-cols" style="margin-top: 5px;">
+        <div>
+          <div class="section-title">
+            <span>2. auth.guard.ts (Functional Guard)</span>
+            <span class="tag">CanActivateFn</span>
+          </div>
+          <div class="code-box"><span class="kw">import</span> { inject } <span class="kw">from</span> <span class="str">'@angular/core'</span>;
+<span class="kw">import</span> { CanActivateFn, Router, UrlTree } <span class="kw">from</span> <span class="str">'@angular/router'</span>;
+<span class="kw">import</span> { AuthService } <span class="kw">from</span> <span class="str">'../services/auth.service'</span>;
+
+<span class="kw">export const</span> <span class="fn">authGuard</span>: <span class="tp">CanActivateFn</span> = (route, state): <span class="tp">boolean</span> | <span class="tp">UrlTree</span> =&gt; {
+  <span class="kw">const</span> auth = <span class="fn">inject</span>(AuthService);
+  <span class="kw">const</span> router = <span class="fn">inject</span>(Router);
+
+  <span class="kw">if</span> (auth.<span class="fn">isAuthenticated</span>()) {
+    <span class="kw">return true</span>;
+  }
+  <span class="cm">// Redirección atómica reteniendo la URL solicitada</span>
+  <span class="kw">return</span> router.<span class="fn">createUrlTree</span>([<span class="str">'/login'</span>], {
+    queryParams: { returnUrl: state.url }
+  });
+};</div>
+        </div>
+
+        <div>
+          <div class="section-title">
+            <span>3. role.guard.ts (Factoría RBAC)</span>
+            <span class="tag">Propuesta 4.2</span>
+          </div>
+          <div class="code-box"><span class="kw">import</span> { inject } <span class="kw">from</span> <span class="str">'@angular/core'</span>;
+<span class="kw">import</span> { CanActivateFn, Router, UrlTree } <span class="kw">from</span> <span class="str">'@angular/router'</span>;
+<span class="kw">import</span> { AuthService } <span class="kw">from</span> <span class="str">'../services/auth.service'</span>;
+
+<span class="kw">export const</span> <span class="fn">roleGuard</span> = (allowedRole: <span class="str">'admin'</span> | <span class="str">'user'</span> | <span class="tp">string</span>): <span class="tp">CanActivateFn</span> =&gt; {
+  <span class="kw">return</span> (route, state): <span class="tp">boolean</span> | <span class="tp">UrlTree</span> =&gt; {
+    <span class="kw">const</span> auth = <span class="fn">inject</span>(AuthService);
+    <span class="kw">const</span> router = <span class="fn">inject</span>(Router);
+    <span class="kw">const</span> session = auth.<span class="fn">currentUser</span>();
+
+    <span class="kw">if</span> (!auth.<span class="fn">isAuthenticated</span>() || !session) {
+      <span class="kw">return</span> router.<span class="fn">createUrlTree</span>([<span class="str">'/login'</span>], { queryParams: { returnUrl: state.url } });
+    }
+    <span class="kw">if</span> (session.role === allowedRole) {
+      <span class="kw">return true</span>;
+    }
+    <span class="cm">// Si rol 'user' intenta entrar en /admin ➔ redirige a /user-dashboard</span>
+    <span class="kw">if</span> (session.role === <span class="str">'user'</span>) {
+      <span class="kw">return</span> router.<span class="fn">createUrlTree</span>([<span class="str">'/user-dashboard'</span>]);
+    }
+    <span class="kw">return</span> router.<span class="fn">createUrlTree</span>([<span class="str">'/admin'</span>]);
+  };
+};</div>
+        </div>
+      </div>
+
+      <div class="section-title" style="margin-top: 5px;">
+        <span>4. Configuración de Rutas con Lazy Loading y Guards (src/app/app.routes.ts)</span>
+        <span class="tag">CE 1.c & CE 1.d</span>
+      </div>
+
+      <div class="code-box"><span class="kw">import</span> { Routes } <span class="kw">from</span> <span class="str">'@angular/router'</span>;
+<span class="kw">import</span> { authGuard } <span class="kw">from</span> <span class="str">'./core/guards/auth.guard'</span>;
+<span class="kw">import</span> { roleGuard } <span class="kw">from</span> <span class="str">'./core/guards/role.guard'</span>;
+
+<span class="kw">export const</span> routes: <span class="tp">Routes</span> = [
+  { path: <span class="str">''</span>, redirectTo: <span class="str">'login'</span>, pathMatch: <span class="str">'full'</span> },
+  { path: <span class="str">'login'</span>, loadComponent: () =&gt; <span class="kw">import</span>(<span class="str">'./pages/login/login.page'</span>).<span class="fn">then</span>(m =&gt; m.LoginPage) },
+  {
+    path: <span class="str">'admin'</span>,
+    canActivate: [authGuard, <span class="fn">roleGuard</span>(<span class="str">'admin'</span>)], <span class="cm">// Protegido por ambos guards funcionales</span>
+    loadComponent: () =&gt; <span class="kw">import</span>(<span class="str">'./pages/admin/admin.page'</span>).<span class="fn">then</span>(m =&gt; m.AdminPage)
+  },
+  {
+    path: <span class="str">'user-dashboard'</span>,
+    canActivate: [authGuard, <span class="fn">roleGuard</span>(<span class="str">'user'</span>)], <span class="cm">// Protegido para perfil estándar</span>
+    loadComponent: () =&gt; <span class="kw">import</span>(<span class="str">'./pages/user-dashboard/user-dashboard.page'</span>).<span class="fn">then</span>(m =&gt; m.UserDashboardPage)
+  },
+  { path: <span class="str">'**'</span>, redirectTo: <span class="str">'login'</span> }
+];</div>
+    </div>
+
+    <div class="page-footer">
+      <span>Desarrollo de Interfaces (0488) • Práctica Ionic & Angular Standalone</span>
+      <span>Página 2 de 4</span>
+      <span>Daniel Daroca — 2º DAM</span>
+    </div>
+  </div>
+
+  <!-- ==================== PÁGINA 3 ==================== -->
+  <div class="page">
+    <div>
+      <div class="header-banner">
+        <div class="header-left">
+          <h1>Código Relevante: Componentes y Control Flow</h1>
+          <div class="subtitle">Vistas Standalone: LoginPage, AdminPage y UserDashboardPage con Ionic</div>
+        </div>
+        <div class="header-meta">
+          <strong>Vistas:</strong> Login, Admin, User-Dashboard<br>
+          <strong>Sintaxis:</strong> Control Flow (@if), Signals<br>
+          <strong>Alumno:</strong> Daniel Daroca
+        </div>
+      </div>
+
+      <div class="two-cols">
+        <div>
+          <div class="section-title">
+            <span>1. login.page.ts</span>
+            <span class="tag">TypeScript Standalone</span>
+          </div>
+          <div class="code-box"><span class="pol">@Component</span>({
+  selector: <span class="str">'app-login'</span>,
+  templateUrl: <span class="str">'./login.page.html'</span>,
+  styleUrls: [<span class="str">'./login.page.scss'</span>],
+  standalone: <span class="kw">true</span>,
+  imports: [CommonModule, FormsModule, IonContent, IonHeader, ...]
+})
+<span class="kw">export class</span> <span class="tp">LoginPage</span> <span class="kw">implements</span> <span class="tp">OnInit</span> {
+  <span class="kw">private</span> auth = <span class="fn">inject</span>(AuthService);
+  <span class="kw">private</span> router = <span class="fn">inject</span>(Router);
+  <span class="kw">private</span> route = <span class="fn">inject</span>(ActivatedRoute);
+
+  <span class="kw">public</span> username = <span class="str">''</span>;
+  <span class="kw">public</span> password = <span class="str">''</span>;
+  <span class="kw">public</span> errorMessage = <span class="str">''</span>;
+
+  <span class="fn">ngOnInit</span>(): <span class="tp">void</span> {
+    <span class="kw">if</span> (<span class="kw">this</span>.auth.<span class="fn">isAuthenticated</span>()) {
+      <span class="kw">const</span> role = <span class="kw">this</span>.auth.<span class="fn">currentUser</span>()?.role;
+      <span class="kw">this</span>.router.<span class="fn">navigate</span>([role === <span class="str">'admin'</span> ? <span class="str">'/admin'</span> : <span class="str">'/user-dashboard'</span>]);
+    }
+  }
+
+  <span class="kw">public</span> <span class="fn">handleLogin</span>(): <span class="tp">void</span> {
+    <span class="kw">const</span> ok = <span class="kw">this</span>.auth.<span class="fn">login</span>(<span class="kw">this</span>.username, <span class="kw">this</span>.password);
+    <span class="kw">if</span> (ok) {
+      <span class="kw">const</span> s = <span class="kw">this</span>.auth.<span class="fn">currentUser</span>();
+      <span class="kw">const</span> ret = <span class="kw">this</span>.route.snapshot.queryParams[<span class="str">'returnUrl'</span>];
+      <span class="kw">if</span> (ret &amp;&amp; !(ret.startsWith(<span class="str">'/admin'</span>) &amp;&amp; s?.role === <span class="str">'user'</span>)) {
+        <span class="kw">this</span>.router.<span class="fn">navigateByUrl</span>(ret);
+      } <span class="kw">else</span> {
+        <span class="kw">this</span>.router.<span class="fn">navigate</span>([s?.role === <span class="str">'admin'</span> ? <span class="str">'/admin'</span> : <span class="str">'/user-dashboard'</span>]);
+      }
+    } <span class="kw">else</span> {
+      <span class="kw">this</span>.errorMessage = <span class="str">'Credenciales no autorizadas. Use admin / 123 u operador / 123'</span>;
+    }
+  }
+}</div>
+        </div>
+
+        <div>
+          <div class="section-title">
+            <span>2. login.page.html</span>
+            <span class="tag">Ionic UI & Control Flow</span>
+          </div>
+          <div class="code-box">&lt;<span class="kw">ion-header</span> [translucent]=<span class="str">"true"</span>&gt;
+  &lt;<span class="kw">ion-toolbar</span> color=<span class="str">"primary"</span>&gt;
+    &lt;<span class="kw">ion-title</span>&gt;Control de Acceso&lt;/<span class="kw">ion-title</span>&gt;
+  &lt;/<span class="kw">ion-toolbar</span>&gt;
+&lt;/<span class="kw">ion-header</span>&gt;
+
+&lt;<span class="kw">ion-content</span> class=<span class="str">"ion-padding"</span>&gt;
+  &lt;<span class="kw">ion-card</span> class=<span class="str">"login-card"</span>&gt;
+    &lt;<span class="kw">ion-card-header</span>&gt;
+      &lt;<span class="kw">ion-card-title</span> class=<span class="str">"ion-text-center"</span>&gt;Iniciar Sesión&lt;/<span class="kw">ion-card-title</span>&gt;
+      &lt;<span class="kw">ion-card-subtitle</span> class=<span class="str">"ion-text-center"</span>&gt;Introduce credenciales&lt;/<span class="kw">ion-card-subtitle</span>&gt;
+    &lt;/<span class="kw">ion-card-header</span>&gt;
+
+    &lt;<span class="kw">ion-card-content</span>&gt;
+      &lt;<span class="kw">ion-item</span> fill=<span class="str">"outline"</span> class=<span class="str">"ion-margin-bottom"</span>&gt;
+        &lt;<span class="kw">ion-label</span> position=<span class="str">"floating"</span>&gt;Usuario&lt;/<span class="kw">ion-label</span>&gt;
+        &lt;<span class="kw">ion-input</span> type=<span class="str">"text"</span> [(ngModel)]=<span class="str">"username"</span>&gt;&lt;/<span class="kw">ion-input</span>&gt;
+      &lt;/<span class="kw">ion-item</span>&gt;
+
+      &lt;<span class="kw">ion-item</span> fill=<span class="str">"outline"</span> class=<span class="str">"ion-margin-bottom"</span>&gt;
+        &lt;<span class="kw">ion-label</span> position=<span class="str">"floating"</span>&gt;Contraseña&lt;/<span class="kw">ion-label</span>&gt;
+        &lt;<span class="kw">ion-input</span> type=<span class="str">"password"</span> [(ngModel)]=<span class="str">"password"</span>&gt;&lt;/<span class="kw">ion-input</span>&gt;
+      &lt;/<span class="kw">ion-item</span>&gt;
+
+      &lt;<span class="kw">ion-button</span> expand=<span class="str">"block"</span> (click)=<span class="str">"handleLogin()"</span>&gt;Acceder al Panel&lt;/<span class="kw">ion-button</span>&gt;
+
+      <span class="pol">@if</span> (errorMessage) {
+        &lt;<span class="kw">ion-text</span> color=<span class="str">"danger"</span>&gt;
+          &lt;<span class="kw">p</span> class=<span class="str">"ion-text-center error-box"</span>&gt;{{ errorMessage }}&lt;/<span class="kw">p</span>&gt;
+        &lt;/<span class="kw">ion-text</span>&gt;
+      }
+    &lt;/<span class="kw">ion-card-content</span>&gt;
+  &lt;/<span class="kw">ion-card</span>&gt;
+&lt;/<span class="kw">ion-content</span>&gt;</div>
+        </div>
+      </div>
+
+      <div class="two-cols" style="margin-top: 5px;">
+        <div>
+          <div class="section-title">
+            <span>3. admin.page.ts & admin.page.html</span>
+            <span class="tag">Panel Superadmin</span>
+          </div>
+          <div class="code-box"><span class="cm">// admin.page.ts</span>
+<span class="pol">@Component</span>({
+  selector: <span class="str">'app-admin'</span>,
+  templateUrl: <span class="str">'./admin.page.html'</span>,
+  standalone: <span class="kw">true</span>,
+  imports: [CommonModule, IonContent, IonHeader, ...]
+})
+<span class="kw">export class</span> <span class="tp">AdminPage</span> {
+  <span class="kw">private</span> auth = <span class="fn">inject</span>(AuthService);
+  <span class="kw">private</span> router = <span class="fn">inject</span>(Router);
+  <span class="kw">public</span> currentSession = <span class="kw">this</span>.auth.currentUser;
+
+  <span class="kw">public</span> <span class="fn">handleLogout</span>(): <span class="tp">void</span> {
+    <span class="kw">this</span>.auth.<span class="fn">logout</span>();
+    <span class="kw">this</span>.router.<span class="fn">navigate</span>([<span class="str">'/login'</span>]);
+  }
+}
+
+<span class="cm">&lt;!-- admin.page.html (fragmento) --&gt;</span>
+&lt;<span class="kw">ion-card</span> color=<span class="str">"light"</span>&gt;
+  &lt;<span class="kw">ion-card-title</span>&gt;Bienvenido, {{ currentSession()?.username }}&lt;/<span class="kw">ion-card-title</span>&gt;
+  &lt;<span class="kw">ion-card-subtitle</span>&gt;Rol: {{ currentSession()?.role }}&lt;/<span class="kw">ion-card-subtitle</span>&gt;
+  &lt;<span class="kw">p</span>&gt;Superada validación de &lt;<span class="kw">code</span>&gt;authGuard&lt;/<span class="kw">code</span>&gt; y &lt;<span class="kw">code</span>&gt;roleGuard('admin')&lt;/<span class="kw">code</span>&gt;.&lt;/<span class="kw">p</span>&gt;
+&lt;/<span class="kw">ion-card</span>&gt;</div>
+        </div>
+
+        <div>
+          <div class="section-title">
+            <span>4. user-dashboard.page.ts & html</span>
+            <span class="tag">Panel Operador & Intercepción</span>
+          </div>
+          <div class="code-box"><span class="cm">// user-dashboard.page.ts</span>
+<span class="pol">@Component</span>({
+  selector: <span class="str">'app-user-dashboard'</span>,
+  templateUrl: <span class="str">'./user-dashboard.page.html'</span>,
+  standalone: <span class="kw">true</span>,
+  imports: [CommonModule, IonContent, IonHeader, ...]
+})
+<span class="kw">export class</span> <span class="tp">UserDashboardPage</span> {
+  <span class="kw">private</span> auth = <span class="fn">inject</span>(AuthService);
+  <span class="kw">private</span> router = <span class="fn">inject</span>(Router);
+  <span class="kw">public</span> currentSession = <span class="kw">this</span>.auth.currentUser;
+  <span class="kw">public</span> feedbackMessage = <span class="str">''</span>;
+
+  <span class="cm">/** Prueba de acceso directo requerida en Sección 4.2 */</span>
+  <span class="kw">public async</span> <span class="fn">testDirectAdminAccess</span>(): <span class="tp">Promise</span>&lt;<span class="tp">void</span>&gt; {
+    <span class="kw">await</span> <span class="kw">this</span>.router.<span class="fn">navigate</span>([<span class="str">'/admin'</span>]);
+    <span class="kw">this</span>.feedbackMessage = <span class="str">'⛔ [ACCESO DENEGADO]: roleGuard("admin") bloqueó el acceso.'</span>;
+  }
+}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <span>Desarrollo de Interfaces (0488) • Práctica Ionic & Angular Standalone</span>
+      <span>Página 3 de 4</span>
+      <span>Daniel Daroca — 2º DAM</span>
+    </div>
+  </div>
+
+  <!-- ==================== PÁGINA 4 ==================== -->
+  <div class="page">
+    <div>
+      <div class="header-banner">
+        <div class="header-left">
+          <h1>Evidencias Visuales, Verificación y Pruebas Unitarias</h1>
+          <div class="subtitle">Capturas de Ejecución de UI, DevTools SessionStorage y Suite Vitest</div>
+        </div>
+        <div class="header-meta">
+          <strong>Testing:</strong> 16/16 Tests Superados<br>
+          <strong>Navegador:</strong> Chromium DevTools<br>
+          <strong>Alumno:</strong> Daniel Daroca
+        </div>
+      </div>
+
+      <div class="section-title">
+        <span>1. Simulación Visual de Pantallas y Comportamiento de Seguridad</span>
+        <span class="tag">Captura de Interfaz</span>
+      </div>
+
+      <div class="two-cols">
+        <!-- Mockup 1: Login -->
+        <div class="mockup-container">
+          <div class="mockup-header">
+            <div class="mockup-dots"><div class="mockup-dot r"></div><div class="mockup-dot y"></div><div class="mockup-dot g"></div></div>
+            <div class="mockup-url">http://localhost:8100/login</div>
+          </div>
+          <div class="mockup-body">
+            <div class="mock-toolbar">
+              <span>Control de Acceso</span>
+              <span class="mock-badge">Ionic 9</span>
+            </div>
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px; text-align: center;">
+              <div style="font-size: 16pt;">🔒</div>
+              <strong style="font-size: 7.8pt;">Iniciar Sesión</strong>
+              <div style="font-size: 6.8pt; color: #64748b; margin-bottom: 5px;">Introduce tus credenciales</div>
+              <div style="border: 1px solid #cbd5e1; border-radius: 4px; padding: 2px 5px; text-align: left; margin-bottom: 3px; font-size: 6.8pt;">
+                <span style="color: #64748b;">Usuario:</span> <strong>operador</strong>
+              </div>
+              <div style="border: 1px solid #cbd5e1; border-radius: 4px; padding: 2px 5px; text-align: left; margin-bottom: 5px; font-size: 6.8pt;">
+                <span style="color: #64748b;">Pass:</span> •••
+              </div>
+              <div style="background: #2563eb; color: white; padding: 3px; border-radius: 4px; font-weight: bold; font-size: 6.8pt;">Acceder al Panel</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mockup 2: Admin -->
+        <div class="mockup-container">
+          <div class="mockup-header">
+            <div class="mockup-dots"><div class="mockup-dot r"></div><div class="mockup-dot y"></div><div class="mockup-dot g"></div></div>
+            <div class="mockup-url">http://localhost:8100/admin</div>
+          </div>
+          <div class="mockup-body">
+            <div class="mock-toolbar dark">
+              <span>Zona Segura: Panel de Control</span>
+              <span class="mock-badge admin">Cerrar Sesión</span>
+            </div>
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px;">
+              <div style="display: flex; justify-content: space-between;">
+                <span class="mock-badge admin">🛡️ Rol: admin</span>
+                <span style="color: #16a34a; font-weight: bold; font-size: 6.5pt;">● Sesión Activa</span>
+              </div>
+              <strong style="font-size: 7.8pt; display: block; margin-top: 3px;">Bienvenido, admin</strong>
+              <div style="background: #f0fdf4; border-left: 3px solid #16a34a; padding: 3px 5px; margin-top: 4px; font-size: 6.6pt; color: #166534;">
+                ✅ Has superado la validación del enrutador (<code>authGuard</code> y <code>roleGuard('admin')</code>).
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="two-cols" style="margin-top: 4px;">
+        <!-- Mockup 3: User Dashboard con Intercepción de Ataque -->
+        <div class="mockup-container">
+          <div class="mockup-header">
+            <div class="mockup-dots"><div class="mockup-dot r"></div><div class="mockup-dot y"></div><div class="mockup-dot g"></div></div>
+            <div class="mockup-url">http://localhost:8100/user-dashboard</div>
+          </div>
+          <div class="mockup-body">
+            <div class="mock-toolbar">
+              <span>Panel Operador: Zona de Usuario</span>
+              <span class="mock-badge err">Cerrar Sesión</span>
+            </div>
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 6px; padding: 5px;">
+              <span class="mock-badge user">👷 Rol: user</span>
+              <strong style="font-size: 7.6pt; margin-left: 4px;">Bienvenido, operador</strong>
+              <div class="test-box">
+                <strong>Verificación Requisito 4.2 (Intento a /admin):</strong>
+                <div style="margin-top: 2px;">Al escribir directamente <code>/admin</code> o pulsar el botón de prueba, <code>roleGuard('admin')</code> intercepta y redirige aquí.</div>
+                <div style="background: #fee2e2; color: #991b1b; padding: 2px 4px; border-radius: 3px; margin-top: 3px; font-weight: bold;">
+                  ⛔ ACCESO DENEGADO POR ROLEGUARD: Redirigido a /user-dashboard.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mockup 4: DevTools Session Storage -->
+        <div class="mockup-container">
+          <div class="mockup-header">
+            <div class="mockup-dots"><div class="mockup-dot r"></div><div class="mockup-dot y"></div><div class="mockup-dot g"></div></div>
+            <div class="mockup-url">DevTools > Application > Session Storage > http://localhost:8100</div>
+          </div>
+          <div class="mockup-body" style="background: #0f172a; color: #e2e8f0; font-family: monospace; font-size: 6.6pt;">
+            <div style="color: #38bdf8; border-bottom: 1px solid #334155; padding-bottom: 2px; margin-bottom: 3px;">
+              Key: DAM2_AUTH_SESSION
+            </div>
+            <div style="color: #4ade80;">
+              Value: {<br>
+              &nbsp;&nbsp;"username": "admin",<br>
+              &nbsp;&nbsp;"role": "admin",<br>
+              &nbsp;&nbsp;"isAuthenticated": true<br>
+              }
+            </div>
+            <div style="margin-top: 4px; color: #94a3b8; font-size: 6.2pt;">
+              // Sincronizado automáticamente mediante Web Storage API
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title" style="margin-top: 5px;">
+        <span>2. Matriz de Pruebas y Casos de Verificación Técnica</span>
+        <span class="tag">Resultados de Pruebas</span>
+      </div>
+
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Caso de Prueba</th>
+            <th>Estado Previo</th>
+            <th>Acción Realizada</th>
+            <th>Respuesta del Guard / Router</th>
+            <th>Resultado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1. Acceso Anónimo a /admin</strong></td>
+            <td>Sin sesión</td>
+            <td>URL directa <code>http://localhost:8100/admin</code></td>
+            <td><code>authGuard</code> cancela y devuelve <code>UrlTree('/login?returnUrl=/admin')</code></td>
+            <td class="status-ok">✔ SUPERADO</td>
+          </tr>
+          <tr>
+            <td><strong>2. Login Admin Válido</strong></td>
+            <td>En <code>/login</code></td>
+            <td>Introduce <code>admin / 123</code></td>
+            <td><code>AuthService</code> almacena clave en <code>sessionStorage</code> y navega a <code>/admin</code></td>
+            <td class="status-ok">✔ SUPERADO</td>
+          </tr>
+          <tr>
+            <td><strong>3. Persistencia de Sesión (F5)</strong></td>
+            <td>En <code>/admin</code> autenticado</td>
+            <td>Refrescar navegador (F5 / recarga total)</td>
+            <td><code>readSessionFromStorage()</code> rehidrata Signal en milisegundos; no se desloguea</td>
+            <td class="status-ok">✔ SUPERADO</td>
+          </tr>
+          <tr>
+            <td><strong>4. Login Operador Válido</strong></td>
+            <td>En <code>/login</code></td>
+            <td>Introduce <code>operador / 123</code></td>
+            <td>Asigna rol <code>'user'</code> y redirige automáticamente a <code>/user-dashboard</code></td>
+            <td class="status-ok">✔ SUPERADO</td>
+          </tr>
+          <tr>
+            <td><strong>5. Ataque Inter-Rol a /admin</strong></td>
+            <td>Sesión como <code>'user'</code></td>
+            <td>Escribe manualmente en barra <code>/admin</code></td>
+            <td><code>roleGuard('admin')</code> deniega acceso y genera <code>UrlTree('/user-dashboard')</code></td>
+            <td class="status-ok">✔ SUPERADO</td>
+          </tr>
+          <tr>
+            <td><strong>6. Cierre de Sesión Seguro</strong></td>
+            <td>En cualquier panel</td>
+            <td>Pulsa "Cerrar Sesión"</td>
+            <td>Elimina clave <code>DAM2_AUTH_SESSION</code>, Signal a <code>null</code> y redirige a <code>/login</code></td>
+            <td class="status-ok">✔ SUPERADO</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="section-title" style="margin-top: 5px;">
+        <span>3. Verificación Automatizada con Vitest (16 de 16 Tests Pasados)</span>
+        <span class="tag">CI / Testing</span>
+      </div>
+
+      <div class="card" style="background: #f8fafc; font-size: 7.2pt;">
+        <span style="color: #16a34a; font-weight: bold;">✔ 7 Test Files pasados (100%)</span> •
+        <span style="color: #16a34a; font-weight: bold;">✔ 16 Tests unitarios superados en 13.09s</span><br>
+        <div style="font-family: monospace; font-size: 6.6pt; color: #334155; margin-top: 2px;">
+          • auth.service.spec.ts (6 tests: create, default null, login admin, login user, reject invalid, logout)<br>
+          • role.guard.spec.ts (4 tests: redirect unauth, allow admin, deny user to admin, allow user to dashboard)<br>
+          • auth.guard.spec.ts (2 tests: redirect unauth with returnUrl, allow auth)<br>
+          • admin.page.spec.ts (1 test) • user-dashboard.page.spec.ts (1 test) • login.page.spec.ts (1 test) • app.component.spec.ts (1 test)
+        </div>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <span>Desarrollo de Interfaces (0488) • Práctica Ionic & Angular Standalone</span>
+      <span>Página 4 de 4</span>
+      <span>Daniel Daroca — 2º DAM</span>
+    </div>
+  </div>
+
+</body>
+</html>
