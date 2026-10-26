@@ -10,7 +10,7 @@
 ## 🌐 Enlaces del Proyecto
 
 - 🔗 **Repositorio GitHub:** [https://github.com/danidaroca/ionic-auth-guard](https://github.com/danidaroca/ionic-auth-guard)
-- 🚀 **Despliegue en Vercel:** [https://ionic-auth-guard.vercel.app](https://ionic-auth-guard.vercel.app)
+- 🚀 **Despliegue en Vercel:** [https://ionic-auth-guard-lime.vercel.app](https://ionic-auth-guard-lime.vercel.app)
 
 ---
 
