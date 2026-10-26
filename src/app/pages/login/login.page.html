@@ -1,0 +1,55 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Control de Acceso</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="login-wrapper">
+    <ion-card class="login-card">
+      <ion-card-header>
+        <div class="card-icon-header">
+          <div class="security-badge">
+            <span class="icon">🔒</span>
+          </div>
+        </div>
+        <ion-card-title class="ion-text-center">Iniciar Sesión</ion-card-title>
+        <ion-card-subtitle class="ion-text-center">Introduce tus credenciales del sistema</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-item fill="outline" class="ion-margin-bottom custom-input-item">
+          <ion-label position="floating">Usuario</ion-label>
+          <ion-input type="text" [(ngModel)]="username" placeholder="admin o operador"></ion-input>
+        </ion-item>
+
+        <ion-item fill="outline" class="ion-margin-bottom custom-input-item">
+          <ion-label position="floating">Contraseña</ion-label>
+          <ion-input type="password" [(ngModel)]="password" placeholder="123"></ion-input>
+        </ion-item>
+
+        <ion-button expand="block" (click)="handleLogin()" class="ion-margin-top submit-btn">
+          Acceder al Panel
+        </ion-button>
+
+        @if (errorMessage) {
+          <ion-text color="danger">
+            <p class="ion-text-center error-box">{{ errorMessage }}</p>
+          </ion-text>
+        }
+
+        <div class="quick-credentials ion-margin-top">
+          <p class="creds-label ion-text-center">Accesos rápidos de prueba (Demostración DAM2):</p>
+          <div class="credentials-buttons">
+            <ion-button size="small" fill="outline" color="dark" (click)="fillCredentials('admin', '123')">
+              👑 Admin (admin / 123)
+            </ion-button>
+            <ion-button size="small" fill="outline" color="primary" (click)="fillCredentials('operador', '123')">
+              👷 Operador (operador / 123)
+            </ion-button>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

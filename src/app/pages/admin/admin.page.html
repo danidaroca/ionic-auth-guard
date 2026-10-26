@@ -1,0 +1,77 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="dark">
+    <ion-title>Zona Segura: Panel de Control</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="handleLogout()" fill="solid" color="danger">
+        Cerrar Sesión
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding admin-content">
+  <div class="content-container">
+    <!-- Card de Bienvenida y Estado -->
+    <ion-card color="light" class="status-card">
+      <ion-card-header>
+        <div class="role-badge-row">
+          <span class="badge-role admin-badge">🛡️ Rol: {{ currentSession()?.role }}</span>
+          <span class="badge-status">● Sesión Activa</span>
+        </div>
+        <ion-card-title>Bienvenido, {{ currentSession()?.username }}</ion-card-title>
+        <ion-card-subtitle>Panel Administrativo - Control Total del Sistema</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="info-alert">
+          <p>✅ Has superado la validación del enrutador (<code>authGuard</code> y <code>roleGuard('admin')</code>).</p>
+          <p>💾 La sesión está almacenada activamente en <code>sessionStorage</code> bajo la clave <code>DAM2_AUTH_SESSION</code>.</p>
+        </div>
+
+        <div class="session-json-box">
+          <div class="json-header">Estado en Web Storage API (JSON):</div>
+          <pre><code>{{ sessionJson }}</code></pre>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Métricas del Panel Admin -->
+    <div class="metrics-grid">
+      <ion-card class="metric-card">
+        <ion-card-content>
+          <div class="metric-title">Nivel de Acceso</div>
+          <div class="metric-value">Superadministrador</div>
+          <div class="metric-desc">Permisos completos de lectura y escritura</div>
+        </ion-card-content>
+      </ion-card>
+      <ion-card class="metric-card">
+        <ion-card-content>
+          <div class="metric-title">Tipo de Guarda</div>
+          <div class="metric-value">Functional Guard</div>
+          <div class="metric-desc"><code>CanActivateFn</code> con inyección <code>inject()</code></div>
+        </ion-card-content>
+      </ion-card>
+      <ion-card class="metric-card">
+        <ion-card-content>
+          <div class="metric-title">Persistencia Local</div>
+          <div class="metric-value">sessionStorage</div>
+          <div class="metric-desc">Sobrevive recarga (F5) / Aislado por pestaña</div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Acciones de prueba -->
+    <ion-card class="actions-card">
+      <ion-card-header>
+        <ion-card-title>Pruebas de Navegación y Demostración</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-button expand="block" fill="outline" color="tertiary" (click)="goToUserDashboard()">
+          Visitar Panel de Operador (/user-dashboard)
+        </ion-button>
+        <ion-button expand="block" fill="outline" color="danger" (click)="handleLogout()" class="ion-margin-top">
+          Cerrar Sesión e Interceptar /admin
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

@@ -1,0 +1,83 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Panel de Operador: Zona de Usuario</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="handleLogout()" fill="solid" color="danger">
+        Cerrar Sesión
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding user-content">
+  <div class="content-container">
+    <!-- Card de Bienvenida y Estado del Operador -->
+    <ion-card color="light" class="status-card">
+      <ion-card-header>
+        <div class="role-badge-row">
+          <span class="badge-role user-badge">👷 Rol: {{ currentSession()?.role }}</span>
+          <span class="badge-status">● Sesión Activa</span>
+        </div>
+        <ion-card-title>Bienvenido, {{ currentSession()?.username }}</ion-card-title>
+        <ion-card-subtitle>Panel Operativo - Vista Restringida de Usuario</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="info-alert">
+          <p>✅ Has superado la validación del enrutador (<code>authGuard</code> y <code>roleGuard('user')</code>).</p>
+          <p>🔒 Tu cuenta posee permisos estándar de tipo <strong>'user'</strong>. No dispones de autorización para acceder a <code>/admin</code>.</p>
+        </div>
+
+        <div class="session-json-box">
+          <div class="json-header">Estado en Web Storage API (JSON):</div>
+          <pre><code>{{ sessionJson }}</code></pre>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Simulación y Verificación Técnica Requerida (Sección 4.2) -->
+    <ion-card class="security-test-card">
+      <ion-card-header>
+        <div class="test-header">
+          <span class="test-icon">🛡️</span>
+          <div>
+            <ion-card-title>Verificación de Seguridad: Intento de Acceso a /admin</ion-card-title>
+            <ion-card-subtitle>Requisito 4.2 del enunciado práctico</ion-card-subtitle>
+          </div>
+        </div>
+      </ion-card-header>
+      <ion-card-content>
+        <p class="test-explanation">
+          Si intentas navegar directamente a <code>/admin</code> (ya sea pulsando el botón inferior o escribiendo la URL manualmente en la barra de navegación), <code>roleGuard('admin')</code> interceptará la petición, denegará el acceso y te mantendrá de forma segura en este panel.
+        </p>
+
+        <ion-button expand="block" color="warning" (click)="testDirectAdminAccess()" class="ion-margin-top test-button">
+          ⚠️ Intentar acceder directamente a /admin
+        </ion-button>
+
+        @if (feedbackMessage) {
+          <div class="feedback-box">
+            {{ feedbackMessage }}
+          </div>
+        }
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Métricas y Tareas Operativas -->
+    <div class="metrics-grid">
+      <ion-card class="metric-card">
+        <ion-card-content>
+          <div class="metric-title">Nivel de Acceso</div>
+          <div class="metric-value">Operador Estándar</div>
+          <div class="metric-desc">Funcionalidades restringidas por <code>roleGuard</code></div>
+        </ion-card-content>
+      </ion-card>
+      <ion-card class="metric-card">
+        <ion-card-content>
+          <div class="metric-title">Protección de Rutas</div>
+          <div class="metric-value">Functional Guard</div>
+          <div class="metric-desc">Cancelación atómica con <code>UrlTree</code></div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>
